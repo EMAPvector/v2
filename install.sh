@@ -593,6 +593,9 @@ main() {
   echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
   
   echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
+  yum -y install ntpdate
+  ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+  ntpdate -u time.nist.gov
   python <(curl -sL https://raw.githubusercontent.com/EMAPvector/v2/main/gen_v2ray.py)
 }
 
