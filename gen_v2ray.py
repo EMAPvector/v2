@@ -27,6 +27,7 @@ print('要配置的ip：' + str(ips))
 
 # service_location = '/etc/systemd/system/'
 service_location = '/etc/systemd/system/'
+config_location = '/usr/local/etc/v2ray/'
 
 templet = '''{
 	"log": {
@@ -179,8 +180,22 @@ templet = '''{
 }'''
 
 f = open(service_location + "v2ray.service", "r")
-service_templet = f.read()
-f.close()
+service_templet = '''[Unit]
+Description=V2Ray Service
+Documentation=https://www.v2fly.org/
+After=network.target nss-lookup.target
+
+[Service]
+User=nobody
+CapabilityBoundingSet=~
+AmbientCapabilities=
+NoNewPrivileges=true
+ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/config.json
+Restart=on-failure
+RestartPreventExitStatus=23
+
+[Install]
+WantedBy=multi-user.target'''
 
 for ip in ips:
     ip_short = ip.split('.')[3]
@@ -197,7 +212,7 @@ for ip in ips:
     print('alterId: '+alterId)
 
     config_name = 'config_' + ip_short + '.json'
-    config_f = open(config_name, "w")
+    config_f = open(config_location + config_name, "w")
     config_f.write(config)
     config_f.close()
 
