@@ -23,13 +23,7 @@ for sour_ip in all_ip:
     if 'inet 127.0.0.1' != sour_ip:
         ips.append(sour_ip.replace('inet ',''))
 
-while True:
-    ip_confim = input('要配置的ip：' + str(ips) + ' 如果不对请手动输入，以逗号分割ip\n')
-
-    if '.' in ip_confim:
-        ips = ip_confim.split(',')
-    else:
-        break
+print('要配置的ip：' + str(ips))
 
 # service_location = '/etc/systemd/system/'
 service_location = '/etc/systemd/system/'
