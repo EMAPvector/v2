@@ -23,7 +23,13 @@ for sour_ip in all_ip:
     if 'inet 127.0.0.1' != sour_ip:
         ips.append(sour_ip.replace('inet ',''))
 
-print('要配置的ip：' + str(ips))
+while True:
+    ip_confim = raw_input('要配置的ip：' + str(ips) + ' 如果不对请手动输入，以逗号分割ip\n')
+
+    if '.' in ip_confim:
+        ips = ip_confim.split(',')
+    else:
+        break
 
 # service_location = '/etc/systemd/system/'
 service_location = '/etc/systemd/system/'
@@ -179,7 +185,6 @@ templet = '''{
     }
 }'''
 
-f = open(service_location + "v2ray.service", "r")
 service_templet = '''[Unit]
 Description=V2Ray Service
 Documentation=https://www.v2fly.org/
@@ -196,6 +201,33 @@ RestartPreventExitStatus=23
 
 [Install]
 WantedBy=multi-user.target'''
+
+net_location = '/etc/sysconfig/network-scripts/'
+
+f = open(net_location + "ifcfg-eth0", "r")
+net_tempt = f.read()
+f.close()
+
+net_index = 0
+for ip in ips:
+    device_name = 'eth0:' + str(net_index)
+    net_f = open(net_location + 'ifcfg-' + device_name, 'w')
+    p = re.compile(r'\bDEVICE=.*\n')
+    device = p.findall(net_tempt)[0]
+    net_config = net_tempt.replace(device, 'DEVICE='+device_name + '\n')
+
+    p = re.compile(r'\bIPADDR=.*\n')
+    ip_addr = p.findall(net_tempt)[0]
+    net_config = net_config.replace(ip_addr, 'IPADDR='+ip + '\n')
+    print('添加附加IP：\n' + net_config + '\n')
+    net_f.write(net_config)
+    net_f.close()
+    net_index = net_index + 1
+
+os.system('service network restart')
+
+print('成功重启网络服务...')
+
 
 for ip in ips:
     ip_short = ip.split('.')[3]
