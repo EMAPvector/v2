@@ -251,15 +251,15 @@ for ip in ips:
     uuid_s = str(uuid.uuid1())
     config = templet.replace('{{ip}}',ip)
     vmess = out_templet.replace('{{ip}}',ip)
-
+    
     config = config.replace('{{port}}',port)
-	vmess = vmess.replace('{{port}}',port)
+    vmess = vmess.replace('{{port}}',port)
 
     config = config.replace('{{uuid}}',uuid_s)
-	vmess = vmess.replace('{{uuid}}',uuid_s)
+    vmess = vmess.replace('{{uuid}}',uuid_s)
 
     config = config.replace('{{alterId}}',alterId)
-	vmess = vmess.replace('{{alterId}}',alterId)
+    vmess = vmess.replace('{{alterId}}',alterId)
 
 
     config_name = 'config_' + ip_short + '.json'
@@ -277,7 +277,7 @@ for ip in ips:
     os.system('firewall-cmd --permanent --add-port=' + port + '/udp')
     os.system('systemctl start vpn' + ip_short)
 
-	print(base64.b64encode(vmess))
+    print(base64.b64encode(vmess))
 
     print('=====================================')
 
