@@ -277,7 +277,7 @@ for ip in ips:
     os.system('firewall-cmd --permanent --add-port=' + port + '/udp')
     os.system('systemctl start vpn' + ip_short)
 
-    print(base64.b64encode(vmess))
+    print('vmess://' + base64.b64encode(vmess))
 
     print('=====================================')
 
