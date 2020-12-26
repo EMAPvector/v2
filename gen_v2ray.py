@@ -6,6 +6,7 @@ import os
 import uuid
 import random
 import re
+import base64
 
 
 
@@ -228,6 +229,20 @@ os.system('service network restart')
 
 print('成功重启网络服务...')
 
+out_templet = '''{
+  "v": "2",
+  "ps": "1226-01",
+  "add": "{{ip}}",
+  "port": "{{port}}",
+  "id": "{{uuid}}",
+  "aid": "{{alterId}}",
+  "net": "tcp",
+  "type": "none",
+  "host": "",
+  "path": "",
+  "tls": ""
+}'''
+
 
 for ip in ips:
     ip_short = ip.split('.')[3]
@@ -235,13 +250,17 @@ for ip in ips:
     alterId = str(random.randint(5,60))
     uuid_s = str(uuid.uuid1())
     config = templet.replace('{{ip}}',ip)
-    print('IP: '+ip)
+    vmess = out_templet.replace('{{ip}}',ip)
+
     config = config.replace('{{port}}',port)
-    print('port: '+port)
+	vmess = vmess.replace('{{port}}',port)
+
     config = config.replace('{{uuid}}',uuid_s)
-    print('uuid: '+uuid_s)
+	vmess = vmess.replace('{{uuid}}',uuid_s)
+
     config = config.replace('{{alterId}}',alterId)
-    print('alterId: '+alterId)
+	vmess = vmess.replace('{{alterId}}',alterId)
+
 
     config_name = 'config_' + ip_short + '.json'
     config_f = open(config_location + config_name, "w")
@@ -257,6 +276,8 @@ for ip in ips:
     os.system('firewall-cmd --permanent --add-port=' + port + '/tcp')
     os.system('firewall-cmd --permanent --add-port=' + port + '/udp')
     os.system('systemctl start vpn' + ip_short)
+
+	print(base64.b64encode(vmess))
 
     print('=====================================')
 
