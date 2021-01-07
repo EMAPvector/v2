@@ -7,6 +7,7 @@ import uuid
 import random
 import re
 import base64
+import datetime
 
 
 
@@ -231,7 +232,7 @@ print('成功重启网络服务...')
 
 out_templet = '''{
   "v": "2",
-  "ps": "1226-01",
+  "ps": "{{name}}",
   "add": "{{ip}}",
   "port": "{{port}}",
   "id": "{{uuid}}",
@@ -243,6 +244,8 @@ out_templet = '''{
   "tls": ""
 }'''
 
+index = 1
+today = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d')
 
 for ip in ips:
     ip_short = ip.split('.')[3]
@@ -260,6 +263,8 @@ for ip in ips:
 
     config = config.replace('{{alterId}}',alterId)
     vmess = vmess.replace('{{alterId}}',alterId)
+
+    vmess = vmess.replace('{{name}}',today + '-' + str(index))
 
 
     config_name = 'config_' + ip_short + '.json'
