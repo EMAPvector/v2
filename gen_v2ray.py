@@ -265,6 +265,7 @@ for ip in ips:
     vmess = vmess.replace('{{alterId}}',alterId)
 
     vmess = vmess.replace('{{name}}',today + '-' + str(index))
+    index = index + 1
 
 
     config_name = 'config_' + ip_short + '.json'
