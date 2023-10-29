@@ -118,19 +118,18 @@ do
   "v": "2",
   "ps": "tag-ip",
   "add": "tag-ip",
-  "port": "8089",
+  "port": "31535",
   "id": "uuid",
-  "aid": "64",
-  "net": "ws",
-  "type": "none",
-  "host": "tag-ip",
-  "path": "/chat/tag-path",
+  "aid": "0",
+  "net": "kcp",
+  "type": "dtls",
+  "host": "",
+  "path": "",
   "tls": ""
 }
 EOF
   sed -i "s/tag-ip/$ip/" /etc/v2ray/hwx/vmess_qr.json
   sed -i "s/uuid/$uuid/" /etc/v2ray/hwx/vmess_qr.json
-  sed -i "s/tag-path/$short_ip/" /etc/v2ray/hwx/vmess_qr.json
   echo "vmess://$(cat /etc/v2ray/hwx/vmess_qr.json | base64 -w 0)"
 
 done
