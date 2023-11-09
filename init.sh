@@ -107,7 +107,7 @@ do
   cat >/etc/v2ray/hwx/vmess_qr.json <<-EOF
 {
   "v": "2",
-  "ps": "tag-ip",
+  "ps": "jp_tag-ip",
   "add": "tag-ip",
   "port": "8089",
   "id": "uuid",
